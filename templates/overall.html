@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block overall %}
+    <div class="layui-form layui-border-box layui-table-view" style=" height:400px;" id="container"></div>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        option = {
+            title: {
+                text: '未来一周气温变化',
+                subtext: '纯属虚构'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['上称次数', '查看次数','上称次数']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar','time']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data:{{ datatime | safe}}
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name: '新增粉丝',
+                    type: 'line',
+                    data:{{ fans_data }},
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'},
+                            [{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'max'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最大值'
+                                    }
+                                },
+                                type: 'max',
+                                name: '最高点'
+                            }],[{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'min'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最小值'
+                                    }
+                                },
+                                type: 'min',
+                                name: '最低点'
+                            }]
+                        ]
+                    }
+                },
+                {
+                    name: '查看次数',
+                    type: 'line',
+                    data:{{ show_data }},
+                    markPoint: {
+                        data: [
+                            {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5},
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'},
+                            [{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'max'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最大值'
+                                    }
+                                },
+                                type: 'max',
+                                name: '最高点'
+                            }],[{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'min'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最小值'
+                                    }
+                                },
+                                type: 'min',
+                                name: '最低点'
+                            }]
+                        ]
+                    }
+                },
+                {
+                    name: '上称次数',
+                    type: 'line',
+                    data:{{ used }},
+                    markPoint: {
+                        data: [
+                            {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5},
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'},
+                            [{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'max'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最大值'
+                                    }
+                                },
+                                type: 'max',
+                                name: '最高点'
+                            }],[{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'min'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最小值'
+                                    }
+                                },
+                                type: 'min',
+                                name: '最低点'
+                            }]
+                        ]
+                    }
+                }
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    </script>
+
+{% endblock %}
